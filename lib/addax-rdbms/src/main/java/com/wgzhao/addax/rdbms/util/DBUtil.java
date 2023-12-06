@@ -271,6 +271,8 @@ public final class DBUtil
             //oracle.net.READ_TIMEOUT for jdbc versions < 10.1.0.5 oracle.jdbc.ReadTimeout for jdbc versions >=10.1.0.5
             // unit ms
             bds.addConnectionProperty("oracle.jdbc.ReadTimeout", String.valueOf(socketTimeout * 1000));
+            bds.setTestOnBorrow(true);
+            bds.setValidationQuery("select 1 from dual");
         }
         if (url.contains("inceptor2")) {
             LOG.warn("inceptor2 must be process specially");
@@ -341,7 +343,7 @@ public final class DBUtil
             stmt = conn.createStatement(); //NOSONAR
         }
         stmt.setFetchSize(fetchSize);
-        stmt.setQueryTimeout(queryTimeout);
+        stmt.setQueryTimeout(0);
         return stmt.executeQuery(sql);
     }
 
