@@ -20,6 +20,7 @@
 
 <configuration>
     <property name="log.dir" value="${addax.log}/" />
+    <timestamp key="ymd" datePattern="yyyy-MM-dd"/>
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>true</withJansi>
@@ -30,8 +31,18 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${log.dir}/${log.file.name}</file>
+        <append>false</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%12thread] %-5level %-20logger{0} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>-->
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <encoder>UTF-8</encoder>
+        <file>${log.dir}/${ymd}/${log.file.name}</file>
         <append>false</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%12thread] %-5level %-20logger{0} - %msg%n
@@ -40,7 +51,7 @@
     </appender>
 
     <root level="${loglevel:-INFO}">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

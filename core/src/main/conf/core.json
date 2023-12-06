@@ -38,7 +38,13 @@
       },
       "taskGroup": {
         "channel": 5
+      },
+      "trace": {
+        "enable": "true"
       }
+    },
+    "dataXServer": {
+      "reportPerfLog": "true"
     }
   }
 }

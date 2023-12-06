@@ -39,11 +39,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.StringReader;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -404,7 +402,10 @@ public class CommonRdbmsWriter
                 connection.commit();
             }
             catch (SQLException e) {
-                LOG.warn("Rolling back the write, try to write one line at a time. because: {}", e.getMessage());
+                LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为: {}", e.getMessage());
+                if (e instanceof SQLRecoverableException) {
+                     connection = DBUtil.getConnection(dataBaseType, jdbcUrl, username, password);
+                }
                 connection.rollback();
                 doOneInsert(connection, buffer);
             }
@@ -453,6 +454,12 @@ public class CommonRdbmsWriter
         {
             LOG.debug("Record info: {}", record);
             for (int i = 1, len = record.getColumnNumber(); i <= len; i++) {
+                // map.put("name", metaData.getColumnName(i));
+                // map.put("type", metaData.getColumnType(i));
+                // map.put("label", metaData.getColumnLabel(i));
+                // map.put("typeName", metaData.getColumnTypeName(i));
+                // map.put("precision", metaData.getPrecision(i));
+                // map.put("scale", metaData.getScale(i));
                 int columnSqlType = (int) this.resultSetMetaData.get(i).get("type");
                 preparedStatement = fillPreparedStatementColumnType(preparedStatement, i, columnSqlType, record.getColumn(i - 1));
             }
@@ -460,18 +467,24 @@ public class CommonRdbmsWriter
         }
 
         protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement preparedStatement, int columnIndex, int columnSqlType, Column column)
-                throws SQLException
-        {
+                throws SQLException {
             if (column == null || column.getRawData() == null) {
                 preparedStatement.setObject(columnIndex, null);
                 return preparedStatement;
             }
             java.util.Date utilDate;
             switch (columnSqlType) {
-                case Types.CHAR:
-                case Types.NCHAR:
                 case Types.CLOB:
                 case Types.NCLOB:
+                    String colValue = column.asString();
+                    if (StringUtils.isNotBlank(colValue)) {
+                        preparedStatement.setClob(columnIndex, new StringReader(colValue), (long) colValue.length());
+                    } else {
+                        preparedStatement.setClob(columnIndex, (Clob) null);
+                    }
+                    break;
+                case Types.CHAR:
+                case Types.NCHAR:
                 case Types.VARCHAR:
                 case Types.LONGVARCHAR:
                 case Types.NVARCHAR:

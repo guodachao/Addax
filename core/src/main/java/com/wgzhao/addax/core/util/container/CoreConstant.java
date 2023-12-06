@@ -115,6 +115,12 @@ public class CoreConstant
     public static final String JOB_POST_HANDLER_PLUGIN_NAME = "job.postHandler.pluginName";
 
     public static final String JOB_CONTENT_WRITER_PATH = "job.content.writer.parameter.path";
+
+    public static final String DATAX_CORE_CONTAINER_TRACE_ENABLE = "core.container.trace.enable";
+
+    public static final String DATAX_CORE_REPORT_DATAX_PERFLOG = "core.dataXServer.reportPerfLog";
+
+
     // ----------------------------- 局部使用的变量
     public static final String JOB_WRITER = "writer";
 
