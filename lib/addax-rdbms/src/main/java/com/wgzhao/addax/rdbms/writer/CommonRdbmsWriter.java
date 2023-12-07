@@ -403,8 +403,8 @@ public class CommonRdbmsWriter
             }
             catch (SQLException e) {
                 LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为: {}", e.getMessage());
-                if (e instanceof SQLRecoverableException) {
-                     connection = DBUtil.getConnection(dataBaseType, jdbcUrl, username, password);
+                if (connection.isClosed()) {
+                    connection = DBUtil.getConnection(dataBaseType, jdbcUrl, username, password);
                 }
                 connection.rollback();
                 doOneInsert(connection, buffer);

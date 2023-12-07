@@ -266,7 +266,6 @@ public final class DBUtil
         bds.setUrl(url);
         bds.setUsername(user);
         bds.setPassword(pass);
-
         if (dataBaseType == DataBaseType.Oracle) {
             //oracle.net.READ_TIMEOUT for jdbc versions < 10.1.0.5 oracle.jdbc.ReadTimeout for jdbc versions >=10.1.0.5
             // unit ms
