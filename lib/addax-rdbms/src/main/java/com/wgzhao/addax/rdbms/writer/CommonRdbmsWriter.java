@@ -404,9 +404,11 @@ public class CommonRdbmsWriter
             catch (SQLException e) {
                 LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为: {}", e.getMessage());
                 if (connection.isClosed()) {
+                    LOG.warn("数据源连接重新获取,因为数据源连接已经被关闭.");
                     connection = DBUtil.getConnection(dataBaseType, jdbcUrl, username, password);
+                }else {
+                    connection.rollback();
                 }
-                connection.rollback();
                 doOneInsert(connection, buffer);
             }
             catch (Exception e) {
