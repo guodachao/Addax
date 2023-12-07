@@ -20,16 +20,14 @@
 package com.wgzhao.addax.plugin.writer.mongodbwriter.util;
 
 import com.wgzhao.addax.common.exception.AddaxException;
-import com.wgzhao.addax.common.util.Configuration;
-import com.wgzhao.addax.plugin.writer.mongodbwriter.KeyConstant;
 import com.wgzhao.addax.plugin.writer.mongodbwriter.MongoDBWriterErrorCode;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MongoUtil
@@ -63,7 +61,7 @@ public class MongoUtil
         }
         try {
             MongoCredential credential = MongoCredential.createCredential(userName, database, password.toCharArray());
-            return new MongoClient(parseServerAddress(addressList), Arrays.asList(credential));
+            return new MongoClient(parseServerAddress(addressList), credential, new MongoClientOptions.Builder().build());
         }
         catch (UnknownHostException e) {
             throw AddaxException.asAddaxException(MongoDBWriterErrorCode.ILLEGAL_ADDRESS, "不合法的地址");

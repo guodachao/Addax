@@ -547,15 +547,24 @@ public class JobContainer
             LOG.debug("The report contents: {}", jsonStr);
             postJobRunStatistic(jobResultReportUrl, timeoutMills, jsonStr);
         }
-        LOG.info(String.format("%n" + "%-26s: %-18s%n" + "%-26s: %-18s%n" + "%-26s: %19s%n"
-                        + "%-26s: %19s%n" + "%-26s: %19s%n" + "%-26s: %19s%n" + "%-26s: %19s%n",
-                "Job start  at", dateFormat.format(startTimeStamp),
-                "Job end    at", dateFormat.format(endTimeStamp),
-                "Job took secs", totalCosts + "s",
-                "Average   bps", StrUtil.stringify(byteSpeedPerSecond) + "/s",
-                "Average   rps", recordSpeedPerSecond + "rec/s",
-                "Number of rec", totalReadRecords,
-                "Failed record", totalErrorRecords
+        LOG.info(String.format(
+                "\n" + "%-26s: %-18s\n" + "%-26s: %-18s\n" + "%-26s: %19s\n"
+                        + "%-26s: %19s\n" + "%-26s: %19s\n" + "%-26s: %19s\n"
+                        + "%-26s: %19s\n",
+                "任务启动时刻",
+                dateFormat.format(startTimeStamp),
+                "任务结束时刻",
+                dateFormat.format(endTimeStamp),
+                "任务总计耗时",
+                totalCosts + "s",
+                "任务平均流量",
+                StrUtil.stringify(byteSpeedPerSecond)+ "/s",
+                "记录写入速度",
+                recordSpeedPerSecond+ "rec/s",
+                "读出记录总数",
+                totalReadRecords,
+                "读写失败总数",
+                totalErrorRecords
         ));
         final Long counterSucc = communication.getLongCounter(CommunicationTool.TRANSFORMER_SUCCEED_RECORDS);
         final Long counterFail = communication.getLongCounter(CommunicationTool.TRANSFORMER_FAILED_RECORDS);

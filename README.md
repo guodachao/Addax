@@ -2,7 +2,7 @@
     <img alt="Addax Logo" src="https://github.com/wgzhao/Addax/blob/master/docs/images/logo.png?raw=true" width="205" />
 </p>
 <p align="center">Addax is a versatile open-source ETL tool</p>
-<p align="center"><a href="https://wgzhao.github.io/Addax">Documentation</a> detailed description of how to install and deploy and how to use each collection plugin </p>
+<p align="center">The <a href="https://wgzhao.github.io/Addax">documentation</a> describes in detail how to install and use the plugins. It provides detailed instructions and sample configuration documentation for each plugin. </p>
 <p align="center">
    <a href="https://github.com/wgzhao/Addax/releases">
       <img src="https://img.shields.io/github/release/wgzhao/addax.svg" alt="release version"/>
@@ -14,7 +14,8 @@
 
 English | [简体中文](README_zh.md)
 
-The project, originally from Ali's [DataX](https://github.com/alibaba/datax), has been streamlined and adapted, as described below
+The project's initial code originated from  Ali's [DataX](https://github.com/alibaba/datax), and has been greatly improved on this basis. 
+It also provides more read and write plugins. For more details, please refer to the [difference document](difference.md).
 
 ## Supported Data Sources
 
@@ -62,6 +63,10 @@ Addax supports more than 20 SQL and NoSQL [data sources](support_data_sources.md
 <td><img src="./docs/images/logos/sybase.svg" height="50px" alt="Sybase" style="border: 1px solid #ddd;"></td>  
 <td><img src="./docs/images/logos/tdengine.svg" height="50px" alt="TDengine"  style="border: 1px solid #ddd;"></td>   
 <td><img src="./docs/images/logos/trino.svg" height="50px" alt="Trino" style="border: 1px solid #ddd;"></td>  
+</tr>
+<tr>
+<td><img src="./docs/images/logos/access.svg" height="50px" alt="Access" style="border: 1px solid #add;"></td>
+<td><img src="./docs/images/logos/sap.svg" height="50px" alt="SAP HANA" style="border: 1px solid #add;"></td>
 </tr>
 </table>
 
@@ -233,6 +238,10 @@ We recommend you use IntelliJ as your IDE. The code style template for the proje
 * Avoid using the ternary operator except for trivial expressions.
 * Use an assertion from Airlift's `Assertions` class if there is one that covers your case rather than writing the assertion by hand. Over time, we may move over to more fluent assertions like AssertJ.
 * When writing a Git commit message, follow these [guidelines](https://chris.beams.io/posts/git-commit/).
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=wgzhao/Addax&type=Date)](https://star-history.com/#wgzhao/Addax&Date)
 
 ## License
 

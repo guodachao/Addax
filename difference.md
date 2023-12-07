@@ -33,6 +33,8 @@
 12. sqlitereader
 13. tdenginereader
 14. kafkareader
+15. s3reader
+16. accessreader
 
 ### writer plugin
 
@@ -47,6 +49,8 @@
 9. tdenginewriter
 10. kafkawriter
 11. databendwriter
+12. s3writer
+13. accesswriter
 
 ### 部分插件增强功能，罗列如下
 

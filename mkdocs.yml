@@ -40,6 +40,7 @@ nav:
   - quickstart.md
   - setupJob.md
   - 读取插件:
+      - reader/accessreader.md
       - reader/cassandrareader.md
       - reader/clickhousereader.md
       - reader/databendreader.md
@@ -48,6 +49,7 @@ nav:
       - reader/elasticsearchreader.md
       - reader/excelreader.md
       - reader/ftpreader.md
+      - reader/hanareader.md
       - reader/hbase11xreader.md
       - reader/hbase11xsqlreader.md
       - reader/hbase20xreader.md
@@ -75,6 +77,7 @@ nav:
       - reader/txtfilereader.md
 
   - 写入插件:
+      - writer/accesswriter.md
       - writer/cassandrawriter.md
       - writer/clickhousewriter.md
       - writer/dbfwriter.md
@@ -84,6 +87,7 @@ nav:
       - writer/excelwriter.md
       - writer/ftpwriter.md
       - writer/greenplumwriter.md
+      - writer/hanawriter.md
       - writer/hbase11xsqlwriter.md
       - writer/hbase11xwriter.md
       - writer/hbase20xsqlwriter.md

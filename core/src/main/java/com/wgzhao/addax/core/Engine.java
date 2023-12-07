@@ -20,13 +20,11 @@
 package com.wgzhao.addax.core;
 
 import com.wgzhao.addax.common.element.ColumnCast;
-import com.wgzhao.addax.common.statistics.PerfTrace;
 import com.wgzhao.addax.common.statistics.VMInfo;
 import com.wgzhao.addax.common.util.Configuration;
 import com.wgzhao.addax.core.job.JobContainer;
 import com.wgzhao.addax.core.util.ConfigParser;
 import com.wgzhao.addax.core.util.ConfigurationValidate;
-import com.wgzhao.addax.core.util.container.CoreConstant;
 import com.wgzhao.addax.core.util.container.LoadUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;

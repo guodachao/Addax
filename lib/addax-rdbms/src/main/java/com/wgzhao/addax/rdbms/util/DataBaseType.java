@@ -24,6 +24,7 @@ package com.wgzhao.addax.rdbms.util;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import static com.wgzhao.addax.common.base.Constant.SQL_RESERVED_WORDS;
 
 /**
@@ -48,7 +49,9 @@ public enum DataBaseType
     TDengine("tdengine", "com.taosdata.jdbc.TSDBDriver"),
     Trino("trino", "io.trino.jdbc.TrinoDriver"),
     Sybase("sybase", "com.sybase.jdbc4.jdbc.SybDriver"),
-    Databend("databend", "com.databend.jdbc.DatabendDriver");
+    Databend("databend", "com.databend.jdbc.DatabendDriver"),
+    Access("access","net.ucanaccess.jdbc.UcanaccessDriver"),
+    HANA("hana", "com.sap.db.jdbc.Driver");
 
     private static final Pattern jdbcUrlPattern = Pattern.compile("jdbc:\\w+:(?:thin:url=|//|thin:@|)([\\w\\d.,]+).*");
 

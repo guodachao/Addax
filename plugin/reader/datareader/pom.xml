@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.wgzhao.addax</groupId>
         <artifactId>addax-all</artifactId>
-        <version>4.1.2-SNAPSHOT</version>
+        <version>4.1.4-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
@@ -33,6 +33,11 @@
             <version>${guava.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-rng-simple</artifactId>
+            <version>${commons.rng.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
