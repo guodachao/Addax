@@ -33,6 +33,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- dm7 dm8 driver -->
+        <dependency>
+            <groupId>com.dameng</groupId>
+            <artifactId>Dm7JdbcDriver17</artifactId>
+            <version>7.6.0.142</version>
+        </dependency>
+
     </dependencies>
 
     <build>

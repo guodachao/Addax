@@ -19,8 +19,10 @@
 
 package com.wgzhao.addax.plugin.reader.rdbmswriter;
 
+import com.alibaba.druid.util.JdbcUtils;
 import com.wgzhao.addax.common.base.Key;
 import com.wgzhao.addax.common.exception.AddaxException;
+import com.wgzhao.addax.common.exception.CommonErrorCode;
 import com.wgzhao.addax.common.plugin.RecordReceiver;
 import com.wgzhao.addax.common.spi.Writer;
 import com.wgzhao.addax.common.util.Configuration;
@@ -30,8 +32,10 @@ import com.wgzhao.addax.rdbms.util.DataBaseType;
 import com.wgzhao.addax.rdbms.writer.CommonRdbmsWriter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import static com.wgzhao.addax.common.base.Key.CONNECTION;
 import static com.wgzhao.addax.common.base.Key.JDBC_DRIVER;
 
 public class RdbmsWriter
@@ -46,8 +50,7 @@ public class RdbmsWriter
         private CommonRdbmsWriter.Job commonRdbmsWriterJob;
 
         @Override
-        public void init()
-        {
+        public void init() {
             this.originalConfig = super.getPluginJobConf();
 
             // warn：not like mysql, only support insert mode, don't use
@@ -57,12 +60,28 @@ public class RdbmsWriter
                         String.format("写入模式(writeMode)配置有误. 因为不支持配置参数项 writeMode: %s, 仅使用insert sql 插入数据. 请检查您的配置并作出修改.",
                                 writeMode));
             }
-            String jdbcDriver = this.originalConfig.getString(JDBC_DRIVER, null);
-            if (jdbcDriver == null || StringUtils.isBlank(jdbcDriver)) {
-                throw AddaxException.asAddaxException(DBUtilErrorCode.REQUIRED_VALUE, "config 'driver' is required and must not be empty");
+            Configuration connection = this.originalConfig.getListConfiguration(CONNECTION).get(0);
+            if (connection == null) {
+                throw AddaxException.asAddaxException(DBUtilErrorCode.REQUIRED_VALUE, "config 'connection' is required and must not be " +
+                        "empty");
             }
-            // use special jdbc driver class
-            DATABASE_TYPE.setDriverClassName(jdbcDriver);
+            String jdbcDriver = this.originalConfig.getString(JDBC_DRIVER, null);
+            // guess jdbc driver name from jdbc url if not set
+            if (jdbcDriver == null || StringUtils.isBlank(jdbcDriver)) {
+                try {
+                    String jdbcUrl = connection.getString(Key.JDBC_URL);
+                    if (jdbcUrl.isEmpty()) {
+                        throw AddaxException.asAddaxException(DBUtilErrorCode.REQUIRED_VALUE, "config 'jdbcUrl' is required and must not be " +
+                                "empty");
+                    }
+                    DATABASE_TYPE.setDriverClassName(JdbcUtils.getDriverClassName(jdbcUrl));
+                } catch (SQLException e) {
+                    throw AddaxException.asAddaxException(CommonErrorCode.CONFIG_ERROR, e.getMessage());
+                }
+            } else {
+                // use custom jdbc driver
+                DATABASE_TYPE.setDriverClassName(jdbcDriver);
+            }
             this.commonRdbmsWriterJob = new CommonRdbmsWriter.Job(DATABASE_TYPE);
             commonRdbmsWriterJob.init(originalConfig);
         }

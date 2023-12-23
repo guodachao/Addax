@@ -19,8 +19,10 @@
 
 package com.wgzhao.addax.plugin.reader.rdbmsreader;
 
+import com.alibaba.druid.util.JdbcUtils;
 import com.wgzhao.addax.common.base.Key;
 import com.wgzhao.addax.common.exception.AddaxException;
+import com.wgzhao.addax.common.exception.CommonErrorCode;
 import com.wgzhao.addax.common.plugin.RecordSender;
 import com.wgzhao.addax.common.spi.Reader;
 import com.wgzhao.addax.common.util.Configuration;
@@ -29,13 +31,11 @@ import com.wgzhao.addax.rdbms.util.DBUtilErrorCode;
 import com.wgzhao.addax.rdbms.util.DataBaseType;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.sql.SQLException;
 import java.util.List;
 
 import static com.wgzhao.addax.common.base.Constant.DEFAULT_FETCH_SIZE;
-import static com.wgzhao.addax.common.base.Key.CONNECTION;
-import static com.wgzhao.addax.common.base.Key.FETCH_SIZE;
-import static com.wgzhao.addax.common.base.Key.JDBC_DRIVER;
+import static com.wgzhao.addax.common.base.Key.*;
 
 public class RdbmsReader
         extends Reader
@@ -66,12 +66,22 @@ public class RdbmsReader
                         "empty");
             }
             String jdbcDriver = this.originalConfig.getString(JDBC_DRIVER, null);
+            // guess jdbc driver name from jdbc url if not set
             if (jdbcDriver == null || StringUtils.isBlank(jdbcDriver)) {
-                // guess jdbc driver name from jdbc url if not set
-                final String jdbcType = connection.getList(Key.JDBC_URL).get(0).toString().split(":")[1];
-                Arrays.stream(DataBaseType.values()).filter(
-                        dataBaseType -> dataBaseType.getTypeName().equals(jdbcType)).findFirst().ifPresent(dataBaseType ->
-                        DATABASE_TYPE.setDriverClassName(dataBaseType.getDriverClassName()));
+                // final String jdbcType = connection.getList(Key.JDBC_URL).get(0).toString().split(":")[1];
+                // Arrays.stream(DataBaseType.values()).filter(
+                //         dataBaseType -> dataBaseType.getTypeName().equals(jdbcType)).findFirst().ifPresent(dataBaseType ->
+                //         DATABASE_TYPE.setDriverClassName(dataBaseType.getDriverClassName()));
+                try {
+                    List<Object> jdbcUrlList = connection.getList(Key.JDBC_URL);
+                    if (jdbcUrlList.isEmpty()) {
+                        throw AddaxException.asAddaxException(DBUtilErrorCode.REQUIRED_VALUE, "config 'jdbcUrl' is required and must not be " +
+                                "empty");
+                    }
+                    DATABASE_TYPE.setDriverClassName(JdbcUtils.getDriverClassName((String) jdbcUrlList.get(0)));
+                } catch (SQLException e) {
+                    throw AddaxException.asAddaxException(CommonErrorCode.CONFIG_ERROR, e.getMessage());
+                }
             }
             else {
                 // use custom jdbc driver
