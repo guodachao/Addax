@@ -28,6 +28,7 @@
 
     <properties>
         <!-- basic components -->
+        
         <aircompressor.version>0.25</aircompressor.version>
         <awssdk.version>2.20.5</awssdk.version>
         <avro.version>1.11.3</avro.version>
@@ -419,6 +420,7 @@
                 <module>plugin/reader/mongodbreader</module>
                 <module>plugin/reader/mysqlreader</module>
                 <module>plugin/reader/oraclereader</module>
+                <module>plugin/reader/gaussdbreader</module>
                 <module>plugin/reader/postgresqlreader</module>
                 <module>plugin/reader/rdbmsreader</module>
                 <module>plugin/reader/redisreader</module>
@@ -453,6 +455,7 @@
                 <module>plugin/writer/mongodbwriter</module>
                 <module>plugin/writer/mysqlwriter</module>
                 <module>plugin/writer/oraclewriter</module>
+                <module>plugin/writer/gaussdbwriter</module>
                 <module>plugin/writer/postgresqlwriter</module>
                 <module>plugin/writer/rdbmswriter</module>
                 <module>plugin/writer/rediswriter</module>

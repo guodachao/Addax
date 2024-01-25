@@ -66,6 +66,7 @@ nav:
       - reader/mysqlreader.md
       - reader/oraclereader.md
       - reader/postgresqlreader.md
+      - reader/gaussdbreader.md
       - reader/rdbmsreader.md
       - reader/redisreader.md
       - reader/s3reader.md
@@ -100,6 +101,7 @@ nav:
       - writer/mysqlwriter.md
       - writer/oraclewriter.md
       - writer/postgresqlwriter.md
+      - writer/gaussdbwriter.md
       - writer/rdbmswriter.md
       - writer/rediswriter.md
       - writer/s3writer.md
