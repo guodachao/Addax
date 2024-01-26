@@ -160,6 +160,10 @@ public final class WriterUtil
                 writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType) +
                         "INSERT (" + columns + ") VALUES ( " + placeHolders + " );";
             }
+            else if (dataBaseType == DataBaseType.GaussDB) {
+                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType) +
+                        "INSERT (" + columns + ") VALUES ( " + placeHolders + " );";
+            }
             else {
                 throw AddaxException.asAddaxException(DBUtilErrorCode.ILLEGAL_VALUE,
                         String.format("当前数据库不支持 writeMode:%s 模式.", writeMode));
