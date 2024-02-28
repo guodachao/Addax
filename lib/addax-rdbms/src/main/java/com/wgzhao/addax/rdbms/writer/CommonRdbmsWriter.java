@@ -208,6 +208,7 @@ public class CommonRdbmsWriter
         protected String writeMode;
         protected boolean emptyAsNull;
         protected List<Map<String, Object>> resultSetMetaData;
+        protected List<Map<String, Object>> resultSetMetaData_columns;
 
         public Task(DataBaseType dataBaseType)
         {
@@ -288,7 +289,8 @@ public class CommonRdbmsWriter
 
             // 用于写入数据的时候的类型根据目的表字段类型转换
             this.resultSetMetaData = DBUtil.getColumnMetaData(connection, this.table, StringUtils.join(mergeColumns, ","));
-
+            // 该变量是为了resultSetMetaData_columns和columns 字段顺序一致，为后面拼接做准备
+            this.resultSetMetaData_columns = DBUtil.getColumnMetaData(connection, this.table, StringUtils.join(this.columns, ","));
             // 写数据库的SQL语句
             calcWriteRecordSql();
 
@@ -591,10 +593,10 @@ public class CommonRdbmsWriter
         {
             List<String> valueHolders = new ArrayList<>(columnNumber);
             for (int i = 1; i <= columnNumber; i++) {
-                String type = resultSetMetaData.get(i).get("typeName").toString();
+                String type = resultSetMetaData_columns.get(i).get("typeName").toString();
                 valueHolders.add(calcValueHolder(type));
             }
-
+            //columns, valueHolders字段顺序应该匹配，以columns为准
             insertOrReplaceTemplate = WriterUtil.getWriteTemplate(columns, valueHolders, writeMode, dataBaseType, false);
             writeRecordSql = String.format(insertOrReplaceTemplate, table);
         }
