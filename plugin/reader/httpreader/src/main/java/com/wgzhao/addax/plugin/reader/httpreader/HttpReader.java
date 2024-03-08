@@ -37,6 +37,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -49,6 +50,8 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -57,6 +60,8 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -79,9 +84,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 public class HttpReader
         extends Reader
 {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HttpReader.class);
+
     public static class Job
             extends Reader.Job
     {
@@ -211,7 +221,7 @@ public class HttpReader
                 String key = readerSliceConfig.get(HttpKey.RESULT_KEY, null);
                 Object object;
                 if (key != null) {
-                    object = JSON.parseObject(json).get(key);
+                    object = JSONPath.eval(JSON.parseObject(json), key);
                 }
                 else {
                     object = JSON.parse(json);
@@ -244,14 +254,14 @@ public class HttpReader
                 if (columns.size() == 1 && "*".equals(columns.get(0))) {
                     // 没有给定key的情况下，提取JSON的第一层key作为字段处理
                     columns.remove(0);
-                    columns.addAll((Collection<String>) JSONPath.eval(jsonObject, "$.e.keySet()"));
+                    columns.addAll((Collection<String>) JSONPath.eval(jsonObject, "$.keys()"));
                 }
                 int i = 0;
                 for (i=0; i < jsonArray.size(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
                     record = recordSender.createRecord();
                     for (String k : columns) {
-                        Object v = JSONPath.eval(jsonObject, k);
+                        Object v = JSONPath.eval(jsonObject, "$." + k);
                         if (v == null) {
                             record.addColumn(new StringColumn());
                         }
@@ -293,6 +303,10 @@ public class HttpReader
             else if ("post".equalsIgnoreCase(method)) {
                 HttpPost request = new HttpPost(uriBuilder.build());
                 headers.forEach((k, v) -> request.setHeader(k, v.toString()));
+                JSONObject json = new JSONObject(readerSliceConfig.getMap(HttpKey.REQUEST_PARAMETERS, new HashMap<>()));
+                StringEntity entity = new StringEntity(json.toString(), ContentType.APPLICATION_JSON);
+                request.setEntity(entity);
+
                 httpClient = createCloseableHttpClient();
                 response = httpClient.execute(request, this.context);
             }

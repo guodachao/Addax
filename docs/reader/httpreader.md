@@ -58,7 +58,7 @@ bin/addax.sh job/httpreader2stream.json
 |------------|:----:|:-------:|:---:|-------------------------------------|
 | url        |  是   | string  |  无  | 要访问的 HTTP 地址                        |
 | reqParams  |  否   |   map   |  无  | 接口请求参数                              |
-| resultKey  |  否   | string  |  无  | 要获取结果的那个 key 值，如果是获取整个返回值，则可以不用填写   |
+| resultKey  |  否   | string  |  无  | 要获取结果的那个 key 值，如果是获取整个返回值，则可以不用填写， 格式按照jsonPath语法填写  |
 | method     |  否   | string  | get | 请求模式，仅支持 GET，POST 两种，不区分大小写         |
 | column     |  是   |  list   |  无  | 要获取的 key，如果配置为 `"*"` ，则表示获取所有 key 值 |
 | username   |  否   | string  |  无  | 接口请求需要的认证帐号(如有)                     |
@@ -229,5 +229,4 @@ bin/addax.sh job/httpreader2stream.json
 1. 返回的结果必须是 JSON 类型
 2. 当前所有 key 的值均当作字符串类型
 3. 暂不支持接口 Token 鉴权模式
-4. 暂不支持分页获取
 5. 代理仅支持 `http` 模式

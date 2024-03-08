@@ -28,7 +28,7 @@
 
     <properties>
         <!-- basic components -->
-        
+
         <aircompressor.version>0.25</aircompressor.version>
         <awssdk.version>2.20.5</awssdk.version>
         <avro.version>1.11.3</avro.version>
@@ -364,7 +364,6 @@
             <id>basic</id>
             <modules>
                 <!-- reader -->
-                <module>plugin/reader/datareader</module>
                 <module>plugin/reader/hdfsreader</module>
                 <module>plugin/reader/hivereader</module>
                 <module>plugin/reader/mysqlreader</module>
@@ -375,6 +374,8 @@
                 <module>plugin/reader/sqlserverreader</module>
                 <module>plugin/reader/streamreader</module>
                 <module>plugin/reader/txtfilereader</module>
+                <module>plugin/reader/httpreader</module>
+                <module>plugin/reader/gaussdbreader</module>
 
                 <!-- writer -->
                 <module>plugin/writer/hdfswriter</module>
@@ -385,6 +386,7 @@
                 <module>plugin/writer/sqlserverwriter</module>
                 <module>plugin/writer/streamwriter</module>
                 <module>plugin/writer/txtfilewriter</module>
+                <module>plugin/writer/gaussdbwriter</module>
             </modules>
         </profile>
 
