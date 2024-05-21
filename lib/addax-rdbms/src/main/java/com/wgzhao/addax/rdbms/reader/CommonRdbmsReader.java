@@ -339,14 +339,23 @@ public class CommonRdbmsReader
                     return new StringColumn(stringData);
 
                 case Types.ARRAY:
+                    if (rs.getObject(i) == null) {
+                        return new StringColumn(null);
+                    }
                     return new StringColumn(rs.getArray(i).toString());
 
                 case Types.JAVA_OBJECT:
 
                 case Types.OTHER:
+                    if (rs.getObject(i) == null) {
+                        return new StringColumn(null);
+                    }
                     return new StringColumn(rs.getObject(i).toString());
 
                 case Types.SQLXML:
+                    if (rs.getObject(i) == null) {
+                        return new StringColumn(null);
+                    }
                     return new StringColumn(rs.getSQLXML(i).getString());
 
                 default:
