@@ -30,14 +30,10 @@ import com.wgzhao.addax.common.exception.AddaxException;
 import com.wgzhao.addax.common.plugin.RecordSender;
 import com.wgzhao.addax.common.spi.Reader;
 import com.wgzhao.addax.common.util.Configuration;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
+import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -127,6 +123,8 @@ public class HttpReader
         private String username;
         private String password;
 
+        private JSONObject jsonBodyParam = new JSONObject();
+
         @Override
         public void init()
         {
@@ -155,6 +153,7 @@ public class HttpReader
         public void startRead(RecordSender recordSender)
         {
             String method = readerSliceConfig.getString(HttpKey.METHOD, "get");
+            jsonBodyParam = new JSONObject(readerSliceConfig.getMap(HttpKey.REQUEST_PARAMETERS, new HashMap<>()));
 
 
             boolean isPage = readerSliceConfig.getBool(HttpKey.IS_PAGE, false);
@@ -182,6 +181,8 @@ public class HttpReader
                 while (true) {
                     uriBuilder.setParameter(paramPageIndex, String.valueOf(valPageIndex));
                     uriBuilder.setParameter(paramPageSize, String.valueOf(valPageSize));
+                    jsonBodyParam.put(paramPageIndex, valPageIndex);
+                    jsonBodyParam.put(paramPageSize, valPageSize);
                     realPageSize = getRecords(recordSender, method);
                     if (realPageSize < valPageSize) {
                         // means no more data
@@ -303,8 +304,7 @@ public class HttpReader
             else if ("post".equalsIgnoreCase(method)) {
                 HttpPost request = new HttpPost(uriBuilder.build());
                 headers.forEach((k, v) -> request.setHeader(k, v.toString()));
-                JSONObject json = new JSONObject(readerSliceConfig.getMap(HttpKey.REQUEST_PARAMETERS, new HashMap<>()));
-                StringEntity entity = new StringEntity(json.toString(), ContentType.APPLICATION_JSON);
+                StringEntity entity = new StringEntity(jsonBodyParam.toString(), ContentType.APPLICATION_JSON);
                 request.setEntity(entity);
 
                 httpClient = createCloseableHttpClient();

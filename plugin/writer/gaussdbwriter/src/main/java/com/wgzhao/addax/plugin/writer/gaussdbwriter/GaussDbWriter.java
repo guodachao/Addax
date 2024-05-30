@@ -65,15 +65,21 @@ public class GaussDbWriter extends Writer {
             this.writerSliceConfig = super.getPluginJobConf();
             this.commonRdbmsWriterSlave = new CommonRdbmsWriter.Task(DATABASE_TYPE){
                 @Override
-                public String calcValueHolder(String columnType){
-                    if("serial".equalsIgnoreCase(columnType)){
-                        return "?::int";
-                    }else if("bigserial".equalsIgnoreCase(columnType)){
-                        return "?::int8";
-                    }else if("bit".equalsIgnoreCase(columnType)){
-                        return "?::bit varying";
+                public String calcValueHolder(String columnType) {
+                    if ("serial".equalsIgnoreCase(columnType)) {
+                        return "?::INT";
+                    } else if ("bit".equalsIgnoreCase(columnType)) {
+                        return "?::BIT VARYING";
+                    } else if ("bigserial".equalsIgnoreCase(columnType)) {
+                        return "?::BIGINT";
+                    } else if ("xml".equalsIgnoreCase(columnType)) {
+                        return "?::XML";
+                    } else if ("money".equalsIgnoreCase(columnType)) {
+                        return "?::NUMERIC::MONEY";
+                    } else if ("bool".equalsIgnoreCase(columnType)) {
+                        return "?::BOOLEAN";
                     }
-                    return "?::" + columnType;
+                    return super.calcValueHolder(columnType);
                 }
             };
             this.commonRdbmsWriterSlave.init(this.writerSliceConfig);
