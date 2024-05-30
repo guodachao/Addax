@@ -341,7 +341,13 @@ public final class DBUtil
             LOG.warn("The current database does not support TYPE_FORWARD_ONLY/CONCUR_READ_ONLY");
             stmt = conn.createStatement(); //NOSONAR
         }
-        stmt.setFetchSize(fetchSize);
+        String url = conn.getMetaData().getURL();
+        if(url !=null && url.contains("gbase")){
+            stmt.setFetchSize(Integer.MIN_VALUE);
+            LOG.info("============================设置gbase数据库FetchSize为Integer.MIN_VALUE=============="+Integer.MIN_VALUE);
+        }else {
+            stmt.setFetchSize(fetchSize);
+        }
         stmt.setQueryTimeout(0);
         return stmt.executeQuery(sql);
     }
