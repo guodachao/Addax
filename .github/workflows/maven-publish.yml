@@ -31,7 +31,7 @@ jobs:
       #     git-commit-gpgsign: true
 
       - name: 2. Set up Maven
-        uses: stCarolas/setup-maven@v4
+        uses: stCarolas/setup-maven@v5
         with:
           maven-version: 3.6.3
 
@@ -60,7 +60,7 @@ jobs:
       #       ]
 
       - name: 4. Set up JDK
-        uses: actions/setup-java@v4.0.0
+        uses: actions/setup-java@v4.2.1
         with:
           java-version: '8'
           distribution: 'adopt'
@@ -91,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: 8. Upload to GitHub
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |

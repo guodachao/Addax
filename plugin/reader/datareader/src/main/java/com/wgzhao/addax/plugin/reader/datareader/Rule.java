@@ -29,6 +29,7 @@ public enum Rule
     CONSTANT,
     CREDIT_CARD,
     DEBIT_CARD,
+    EMAIL,
     ID_CARD,
     INCR,
     JOB,

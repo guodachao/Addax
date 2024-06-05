@@ -24,7 +24,12 @@ package com.wgzhao.addax.storage.writer;
 import com.wgzhao.addax.common.base.Constant;
 import com.wgzhao.addax.common.base.Key;
 import com.wgzhao.addax.common.compress.ZipCycleOutputStream;
-import com.wgzhao.addax.common.element.*;
+import com.wgzhao.addax.common.element.BoolColumn;
+import com.wgzhao.addax.common.element.Column;
+import com.wgzhao.addax.common.element.DateColumn;
+import com.wgzhao.addax.common.element.LongColumn;
+import com.wgzhao.addax.common.element.Record;
+import com.wgzhao.addax.common.element.TimestampColumn;
 import com.wgzhao.addax.common.exception.AddaxException;
 import com.wgzhao.addax.common.plugin.RecordReceiver;
 import com.wgzhao.addax.common.plugin.TaskPluginCollector;
@@ -42,10 +47,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static com.wgzhao.addax.storage.writer.StorageWriterErrorCode.SQL_REQUIRED_TABLE_NAME;
 
@@ -296,7 +310,7 @@ public class StorageWriterUtil {
                         splitRows.add(nullFormat);
                     } else {
                         // warn: it's all ok if nullFormat is null
-                        boolean isDateColumn = column instanceof DateColumn;
+                        boolean isDateColumn = column instanceof DateColumn || column instanceof TimestampColumn;
                         if (!isDateColumn) {
                             splitRows.add(column.asString());
                         } else {
