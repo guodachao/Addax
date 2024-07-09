@@ -3,5 +3,7 @@
   "class": "com.wgzhao.addax.plugin.reader.rdbmsreader.RdbmsReader",
   "description": "general RDBMS reader plugin",
   "developer": "alibaba",
-  "drivers": []
+  "drivers": [
+    "com.gbase.jdbc.Driver"
+  ]
 }
