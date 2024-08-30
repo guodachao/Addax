@@ -140,17 +140,13 @@ public class StarRocksWriterManager
     private void startAsyncFlushing()
     {
         // start flush thread
-        Thread flushThread = new Thread(new Runnable()
-        {
-            public void run()
-            {
-                while (true) {
-                    try {
-                        asyncFlush();
-                    }
-                    catch (Exception e) {
-                        flushException = e;
-                    }
+        Thread flushThread = new Thread(() -> {
+            while (true) {
+                try {
+                    asyncFlush();
+                }
+                catch (Exception e) {
+                    flushException = e;
                 }
             }
         });
@@ -163,7 +159,7 @@ public class StarRocksWriterManager
     {
         // wait previous flushings
         for (int i = 0; i <= writerOptions.getFlushQueueLength(); i++) {
-            flushQueue.put(new StarRocksFlushTuple("", 0l, null));
+            flushQueue.put(new StarRocksFlushTuple("", 0L, null));
         }
         checkFlushException();
     }
@@ -196,7 +192,7 @@ public class StarRocksWriterManager
                     flushData.setLabel(newLabel);
                 }
                 try {
-                    Thread.sleep(1000l * Math.min(i + 1, 10));
+                    Thread.sleep(1000L * Math.min(i + 1, 10));
                 }
                 catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
