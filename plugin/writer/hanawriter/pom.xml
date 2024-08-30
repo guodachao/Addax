@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.wgzhao.addax</groupId>
         <artifactId>addax-all</artifactId>
-        <version>4.1.4-SNAPSHOT</version>
+        <version>4.1.6-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
     <artifactId>hanawriter</artifactId>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.sap.cloud.db.jdbc</groupId>
             <artifactId>ngdbc</artifactId>
-            <version>2.18.16</version>
+            <version>${ngdbc.version}</version>
         </dependency>
     </dependencies>
     <build>

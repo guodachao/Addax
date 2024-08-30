@@ -257,7 +257,7 @@ public class HttpReader
                     columns.remove(0);
                     columns.addAll((Collection<String>) JSONPath.eval(jsonObject, "$.keys()"));
                 }
-                int i = 0;
+                int i;
                 for (i=0; i < jsonArray.size(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
                     record = recordSender.createRecord();
