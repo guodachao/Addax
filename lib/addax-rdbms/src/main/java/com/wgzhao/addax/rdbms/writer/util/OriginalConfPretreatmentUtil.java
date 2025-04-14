@@ -190,6 +190,7 @@ public final class OriginalConfPretreatmentUtil
     public static void dealWriteMode(Configuration originalConfig, DataBaseType dataBaseType)
     {
         List<String> columns = originalConfig.getList(Key.COLUMN, String.class);
+        List<String> columns_no_update = originalConfig.getList(Key.COLUMN_NO_UPDATE, String.class);
 
         String jdbcUrl = originalConfig.getString(String.format("%s[0].%s", Key.CONNECTION, Key.JDBC_URL));
 
@@ -201,7 +202,7 @@ public final class OriginalConfPretreatmentUtil
             valueHolders.add("?");
         }
 
-        String writeDataSqlTemplate = WriterUtil.getWriteTemplate(columns, valueHolders, writeMode, dataBaseType, false);
+        String writeDataSqlTemplate = WriterUtil.getWriteTemplate(columns_no_update,columns, valueHolders, writeMode, dataBaseType, false);
 
         LOG.info("Writing data using [{}].", writeDataSqlTemplate);
 

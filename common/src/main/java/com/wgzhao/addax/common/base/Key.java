@@ -31,6 +31,7 @@ public class Key
     public static final String CONNECTION = "connection";
     // The columns of reading or writing. list type
     public static final String COLUMN = "column";
+    public static final String COLUMN_NO_UPDATE = "noUpdate";
     // The field's name. string type
     public static final String NAME = "name";
     // The field's position. string/numeric type

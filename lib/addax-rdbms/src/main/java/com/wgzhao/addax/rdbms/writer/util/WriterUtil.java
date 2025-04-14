@@ -130,7 +130,7 @@ public final class WriterUtil
         }
     }
 
-    public static String getWriteTemplate(List<String> columnHolders, List<String> valueHolders,
+    public static String getWriteTemplate(List<String> columnNoUpdateHolders,List<String> columnHolders, List<String> valueHolders,
             String writeMode, DataBaseType dataBaseType, boolean forceUseUpdate)
     {
         String mode = writeMode.trim().toLowerCase();
@@ -149,19 +149,19 @@ public final class WriterUtil
                         doMysqlUpdate(columnHolders);
             }
             else if (dataBaseType == DataBaseType.Oracle) {
-                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType) +
+                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType,columnNoUpdateHolders) +
                         "INSERT (" + columns + ") VALUES ( " + placeHolders + " )";
             }
             else if (dataBaseType == DataBaseType.PostgreSQL) {
                 writeDataSqlTemplate = "INSERT INTO %s (" + columns + ") VALUES ( " + placeHolders + " )" +
-                        doPostgresqlUpdate(writeMode, columnHolders);
+                        doPostgresqlUpdate(writeMode, columnHolders,columnNoUpdateHolders);
             }
             else if (dataBaseType == DataBaseType.SQLServer) {
-                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType) +
+                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType,columnNoUpdateHolders) +
                         "INSERT (" + columns + ") VALUES ( " + placeHolders + " );";
             }
             else if (dataBaseType == DataBaseType.GaussDB) {
-                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType) +
+                writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType,columnNoUpdateHolders) +
                         "INSERT (" + columns + ") VALUES ( " + placeHolders + " );";
             }
             else {
@@ -180,7 +180,7 @@ public final class WriterUtil
         return writeDataSqlTemplate;
     }
 
-    private static String doPostgresqlUpdate(String writeMode, List<String> columnHolders)
+    private static String doPostgresqlUpdate(String writeMode, List<String> columnHolders,List<String> columnNoUpdateHolders)
     {
         String conflict = writeMode.replace("update", "");
         StringBuilder sb = new StringBuilder();
@@ -194,6 +194,10 @@ public final class WriterUtil
         sb.append(" UPDATE SET ");
         boolean first = true;
         for (String column : columnHolders) {
+            //排除只插入不更新得字段
+            if (columnNoUpdateHolders.contains(column)) {
+                continue;
+            }
             if (!first) {
                 sb.append(",");
             }
@@ -231,7 +235,7 @@ public final class WriterUtil
         return sb.toString();
     }
 
-    public static String doOracleOrSqlServerUpdate(String merge, List<String> columnHolders, List<String> valueHolders, DataBaseType dataBaseType)
+    public static String doOracleOrSqlServerUpdate(String merge, List<String> columnHolders, List<String> valueHolders, DataBaseType dataBaseType,List<String> columnNoUpdateHolders)
     {
         String[] sArray = getStrings(merge);
         StringBuilder sb = new StringBuilder();
@@ -261,7 +265,7 @@ public final class WriterUtil
         }
 
         for (int i = 0; i < columnHolders.size(); i++) {
-            if (!Arrays.asList(sArray).contains(columnHolders.get(i))) {
+            if (!Arrays.asList(sArray).contains(columnHolders.get(i)) && !columnNoUpdateHolders.contains(columnHolders.get(i))) {
                 if (!first1) {
                     update.append(",");
                 }

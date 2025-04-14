@@ -202,6 +202,7 @@ public class CommonRdbmsWriter
         protected String jdbcUrl;
         protected String table;
         protected List<String> columns;
+        protected List<String> columns_no_update;
         protected List<String> preSqls;
         protected List<String> postSqls;
         protected int batchSize;
@@ -229,6 +230,8 @@ public class CommonRdbmsWriter
 
             this.columns = writerSliceConfig.getList(Key.COLUMN, String.class);
             this.columnNumber = this.columns.size();
+
+            this.columns_no_update = writerSliceConfig.getList(Key.COLUMN_NO_UPDATE, String.class);
 
             this.preSqls = writerSliceConfig.getList(Key.PRE_SQL, String.class);
             this.postSqls = writerSliceConfig.getList(Key.POST_SQL, String.class);
@@ -277,7 +280,7 @@ public class CommonRdbmsWriter
                     }
                 }
                 for (String s : this.columns) {
-                    if (!Arrays.asList(sArray).contains(s)) {
+                    if (!Arrays.asList(sArray).contains(s) && !this.columns_no_update.contains(s)) {
                         columnsTwo.add(s);
                     }
                 }
@@ -384,7 +387,7 @@ public class CommonRdbmsWriter
                             }
                         }
                         for (int j = 0; j < this.columns.size(); j++) {
-                            if (!Arrays.asList(sArray).contains(columns.get(j))) {
+                            if (!Arrays.asList(sArray).contains(columns.get(j)) && !columns_no_update.contains(columns.get(j))) {
                                 recordOne.add(record.getColumn(j));
                             }
                         }
@@ -610,7 +613,7 @@ public class CommonRdbmsWriter
                 valueHolders.add(calcValueHolder(type));
             }
             //columns, valueHolders字段顺序应该匹配，以columns为准
-            insertOrReplaceTemplate = WriterUtil.getWriteTemplate(columns, valueHolders, writeMode, dataBaseType, false);
+            insertOrReplaceTemplate = WriterUtil.getWriteTemplate(columns_no_update,columns, valueHolders, writeMode, dataBaseType, false);
             writeRecordSql = String.format(insertOrReplaceTemplate, table);
         }
 

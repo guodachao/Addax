@@ -440,7 +440,6 @@
                 <module>plugin/writer/clickhousewriter</module>
                 <module>plugin/writer/dbfwriter</module>
                 <module>plugin/writer/databendwriter</module>
-                <module>plugin/writer/doriswriter</module>
                 <module>plugin/writer/elasticsearchwriter</module>
                 <module>plugin/writer/excelwriter</module>
                 <module>plugin/writer/ftpwriter</module>
@@ -471,5 +470,35 @@
                 <module>plugin/writer/txtfilewriter</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>testqw</id>
+            <modules>
+                <!-- reader -->
+
+                <module>plugin/reader/clickhousereader</module>
+                <module>plugin/reader/mysqlreader</module>
+                <module>plugin/reader/oraclereader</module>
+                <module>plugin/reader/gaussdbreader</module>
+                <module>plugin/reader/postgresqlreader</module>
+                <module>plugin/reader/rdbmsreader</module>
+                <module>plugin/reader/sqlitereader</module>
+                <module>plugin/reader/sqlserverreader</module>
+
+                <!-- writer -->
+
+                <module>plugin/writer/clickhousewriter</module>
+                <module>plugin/writer/mysqlwriter</module>
+                <module>plugin/writer/oraclewriter</module>
+                <module>plugin/writer/gaussdbwriter</module>
+                <module>plugin/writer/postgresqlwriter</module>
+                <module>plugin/writer/rdbmswriter</module>
+                <module>plugin/writer/sqlitewriter</module>
+                <module>plugin/writer/sqlserverwriter</module>
+
+            </modules>
+        </profile>
+
+
     </profiles>
 </project>

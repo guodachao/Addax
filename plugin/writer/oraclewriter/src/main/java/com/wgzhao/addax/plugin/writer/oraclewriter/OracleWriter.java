@@ -20,6 +20,7 @@
 package com.wgzhao.addax.plugin.writer.oraclewriter;
 
 import com.wgzhao.addax.common.base.Key;
+import com.wgzhao.addax.common.element.Column;
 import com.wgzhao.addax.common.exception.AddaxException;
 import com.wgzhao.addax.common.plugin.RecordReceiver;
 import com.wgzhao.addax.common.spi.Writer;
@@ -28,7 +29,13 @@ import com.wgzhao.addax.rdbms.util.DBUtilErrorCode;
 import com.wgzhao.addax.rdbms.util.DataBaseType;
 import com.wgzhao.addax.rdbms.writer.CommonRdbmsWriter;
 
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
+
 
 public class OracleWriter
         extends Writer
@@ -100,7 +107,30 @@ public class OracleWriter
         public void init()
         {
             this.writerSliceConfig = getPluginJobConf();
-            this.commonRdbmsWriterTask = new CommonRdbmsWriter.Task(DATABASE_TYPE);
+            this.commonRdbmsWriterTask = new CommonRdbmsWriter.Task(DATABASE_TYPE) {
+                @Override
+                protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement preparedStatement, int columnIndex, int columnSqlType, Column column)
+                        throws SQLException
+                {
+                    if (writerSliceConfig.getString(Key.WRITE_MODE, "").startsWith("update")) {
+                        if (columnSqlType == Types.CLOB ) {
+                            Clob clob = preparedStatement.getConnection().createClob();
+                            clob.setString(1, column.asString());
+                            preparedStatement.setClob(columnIndex, clob);
+                            return preparedStatement;
+                        }
+                        if (columnSqlType == Types.BLOB) {
+                            Blob blob = preparedStatement.getConnection().createBlob();
+                            blob.setBytes(1, column.asBytes());
+                            preparedStatement.setBlob(columnIndex, blob);
+                            return preparedStatement;
+                        }
+                        return super.fillPreparedStatementColumnType(preparedStatement, columnIndex, columnSqlType, column);
+                    }
+
+                    return super.fillPreparedStatementColumnType(preparedStatement, columnIndex, columnSqlType, column);
+                }
+            };
             commonRdbmsWriterTask.init(writerSliceConfig);
         }
 
