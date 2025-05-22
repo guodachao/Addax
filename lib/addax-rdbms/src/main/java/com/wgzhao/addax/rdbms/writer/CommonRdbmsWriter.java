@@ -495,8 +495,6 @@ public class CommonRdbmsWriter
                         preparedStatement.setString(columnIndex, column.asString());
                     }
                     break;
-                case Types.CHAR:
-                case Types.NCHAR:
                 case Types.NCLOB:
                     String colValue = column.asString();
                     if (StringUtils.isNotBlank(colValue)) {
@@ -505,6 +503,8 @@ public class CommonRdbmsWriter
                         preparedStatement.setClob(columnIndex, (Clob) null);
                     }
                     break;
+                case Types.CHAR:
+                case Types.NCHAR:
                 case Types.VARCHAR:
                 case Types.LONGVARCHAR:
                 case Types.NVARCHAR:
