@@ -7,7 +7,7 @@ Icon
 *.class
 *.log
 *.ctxt
-*.jar
+# *.jar
 *.war
 *.nar
 *.ear

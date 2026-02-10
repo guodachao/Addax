@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.wgzhao.addax.plugin.reader.rdbmswriter;
+package com.wgzhao.addax.plugin.writer.rdbmswriter;
 
 import com.alibaba.druid.util.JdbcUtils;
 import com.wgzhao.addax.common.base.Key;

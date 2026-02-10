@@ -16,7 +16,7 @@
             <outputDirectory>lib</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>src/main/libs</directory>
+            <directory>src/main/resources/libs</directory>
             <includes>
                 <include>*.*</include>
             </includes>

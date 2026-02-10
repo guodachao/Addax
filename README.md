@@ -98,8 +98,8 @@ This script installs Addax to its preferred prefix (/usr/local for macOS Intel, 
 ```shell
 git clone https://github.com/wgzhao/addax.git addax
 cd addax
-mvn clean package
-mvn package assembly:single
+mvn clean package -Ptestqw
+mvn package assembly:single -Ptestqw
 ```
 
 After successful compilation and packaging, a `addax-<version>` folder will be created in the `target/datax` directory of the project directory, where `<version` indicates the version.

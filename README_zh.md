@@ -96,6 +96,9 @@ git clone https://github.com/wgzhao/addax.git addax
 cd addax
 mvn clean package -pl '!:addax-docs'
 mvn package assembly:single
+
+mvn clean package -Ptestqw
+mvn package assembly:single -Ptestqw
 ```
 
 编译打包成功后，会在项目目录的`target/addax` 目录下创建一个 `addax-<version>`的 文件夹，其中 `<version>` 表示版本。
