@@ -35,6 +35,7 @@ public enum DataBaseType
     MySql("mysql", "com.mysql.cj.jdbc.Driver"),
     Hive("hive2", "org.apache.hive.jdbc.HiveDriver"),
     Oracle("oracle", "oracle.jdbc.OracleDriver"),
+    Dm("dm", "dm.jdbc.driver.DmDriver"),
     Presto("presto", "io.prestosql.jdbc.PrestoDriver"),
     ClickHouse("clickhouse", "com.clickhouse.jdbc.ClickHouseDriver"),
     SQLite("sqlite", "org.sqlite.JDBC"),

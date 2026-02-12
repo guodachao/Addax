@@ -495,6 +495,7 @@
                 <module>plugin/writer/rdbmswriter</module>
                 <module>plugin/writer/sqlitewriter</module>
                 <module>plugin/writer/sqlserverwriter</module>
+                <module>plugin/writer/dmwriter</module>
 
             </modules>
         </profile>

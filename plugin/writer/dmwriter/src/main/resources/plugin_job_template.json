@@ -1,0 +1,22 @@
+{
+  "name": "dmwriter",
+  "parameter": {
+    "username": "root",
+    "password": "root",
+    "column": [
+      "id",
+      "name"
+    ],
+    "preSql": [
+      "delete from test"
+    ],
+    "connection": [
+      {
+        "jdbcUrl": "jdbc:dm:@[HOST_NAME]:PORT:[DATABASE_NAME]",
+        "table": [
+          "test"
+        ]
+      }
+    ]
+  }
+}

@@ -148,7 +148,7 @@ public final class WriterUtil
                 writeDataSqlTemplate = "INSERT INTO %s (" + columns + ") VALUES(" + placeHolders + ")" +
                         doMysqlUpdate(columnHolders);
             }
-            else if (dataBaseType == DataBaseType.Oracle) {
+            else if (dataBaseType == DataBaseType.Oracle || dataBaseType == DataBaseType.Dm) {
                 writeDataSqlTemplate = doOracleOrSqlServerUpdate(writeMode, columnHolders, valueHolders, dataBaseType,columnNoUpdateHolders) +
                         "INSERT (" + columns + ") VALUES ( " + placeHolders + " )";
             }
@@ -278,7 +278,7 @@ public final class WriterUtil
             }
         }
 
-        if (dataBaseType == DataBaseType.Oracle) {
+        if (dataBaseType == DataBaseType.Oracle || dataBaseType == DataBaseType.Dm) {
             sb.append(" FROM DUAL ) TMP ON (");
         }
         else {
