@@ -32,6 +32,7 @@ import static com.wgzhao.addax.common.base.Constant.SQL_RESERVED_WORDS;
  */
 public enum DataBaseType
 {
+    ProxyDriver("ProxyDriver", "com.zhibei.engine.spy.ZDriver"),
     MySql("mysql", "com.mysql.cj.jdbc.Driver"),
     Hive("hive2", "org.apache.hive.jdbc.HiveDriver"),
     Oracle("oracle", "oracle.jdbc.OracleDriver"),

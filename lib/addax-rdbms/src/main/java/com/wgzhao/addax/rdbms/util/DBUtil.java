@@ -53,6 +53,7 @@ import java.util.concurrent.TimeUnit;
 public final class DBUtil
 {
     private static final Logger LOG = LoggerFactory.getLogger(DBUtil.class);
+    public static final String PROXY_DRIVER_TAG = "zhibei";
     private static final int DEFAULT_SOCKET_TIMEOUT_SEC = 20_000;
 
     private static final ThreadLocal<ExecutorService> rsExecutors = ThreadLocal.withInitial(() -> Executors.newFixedThreadPool(1, new ThreadFactoryBuilder()
@@ -261,6 +262,10 @@ public final class DBUtil
         return connect(dataBaseType, url, user, pass, DEFAULT_SOCKET_TIMEOUT_SEC);
     }
 
+    private static boolean isProxyDriver(String url){
+        return url.contains(PROXY_DRIVER_TAG);
+    }
+
     private static synchronized Connection connect(DataBaseType dataBaseType, String url, String user, String pass, int socketTimeout)
     {
         BasicDataSource bds = new BasicDataSource();
@@ -282,7 +287,8 @@ public final class DBUtil
         }
         else {
             LOG.debug("Connecting to database with driver {}", dataBaseType.getDriverClassName());
-            bds.setDriverClassName(dataBaseType.getDriverClassName());
+            String driverName = isProxyDriver(url)?DataBaseType.ProxyDriver.getDriverClassName():dataBaseType.getDriverClassName();
+            bds.setDriverClassName(driverName);
         }
         try {
             bds.setMinIdle(2);
