@@ -41,7 +41,7 @@ import static com.wgzhao.addax.common.base.Key.JDBC_DRIVER;
 public class RdbmsWriter
         extends Writer
 {
-    private static final DataBaseType DATABASE_TYPE = DataBaseType.RDBMS;
+    private static final DataBaseType DATABASE_TYPE_WRITER = DataBaseType.RDBMS_WRITE;
 
     public static class Job
             extends Writer.Job
@@ -74,15 +74,19 @@ public class RdbmsWriter
                         throw AddaxException.asAddaxException(DBUtilErrorCode.REQUIRED_VALUE, "config 'jdbcUrl' is required and must not be " +
                                 "empty");
                     }
-                    DATABASE_TYPE.setDriverClassName(JdbcUtils.getDriverClassName(jdbcUrl));
+                    if (jdbcUrl.startsWith("jdbc:dm:")) {
+                        DATABASE_TYPE_WRITER.setDriverClassName("dm.jdbc.driver.DmDriver");
+                    } else {
+                        DATABASE_TYPE_WRITER.setDriverClassName(JdbcUtils.getDriverClassName(jdbcUrl));
+                    }
                 } catch (SQLException e) {
                     throw AddaxException.asAddaxException(CommonErrorCode.CONFIG_ERROR, e.getMessage());
                 }
             } else {
                 // use custom jdbc driver
-                DATABASE_TYPE.setDriverClassName(jdbcDriver);
+                DATABASE_TYPE_WRITER.setDriverClassName(jdbcDriver);
             }
-            this.commonRdbmsWriterJob = new CommonRdbmsWriter.Job(DATABASE_TYPE);
+            this.commonRdbmsWriterJob = new CommonRdbmsWriter.Job(DATABASE_TYPE_WRITER);
             commonRdbmsWriterJob.init(originalConfig);
         }
 
@@ -121,7 +125,7 @@ public class RdbmsWriter
         public void init()
         {
             this.writerSliceConfig = super.getPluginJobConf();
-            this.commonRdbmsWriterTask = new CommonRdbmsWriter.Task(DATABASE_TYPE);
+            this.commonRdbmsWriterTask = new CommonRdbmsWriter.Task(DATABASE_TYPE_WRITER);
             commonRdbmsWriterTask.init(writerSliceConfig);
         }
 

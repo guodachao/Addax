@@ -45,6 +45,8 @@ public enum DataBaseType
     //GaussDB("gaussdb", "org.opengauss.Driver"),
     GaussDB("gaussdb", "org.postgresql.Driver"),
     RDBMS("rdbms", "com.wgzhao.addax.rdbms.util.DataBaseType"),
+    RDBMS_READ("rdbms", "com.wgzhao.addax.rdbms.util.DataBaseType"),
+    RDBMS_WRITE("rdbms", "com.wgzhao.addax.rdbms.util.DataBaseType"),
     DB2("db2", "com.ibm.db2.jcc.DB2Driver"),
     Inceptor2("inceptor2", "org.apache.hive.jdbc.HiveDriver"),
     InfluxDB("influxdb", "org.influxdb.influxdb-java"),

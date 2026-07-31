@@ -40,7 +40,7 @@ import static com.wgzhao.addax.common.base.Key.*;
 public class RdbmsReader
         extends Reader
 {
-    private static final DataBaseType DATABASE_TYPE = DataBaseType.RDBMS;
+    private static final DataBaseType DATABASE_TYPE_READ = DataBaseType.RDBMS_READ;
 
     public static class Job
             extends Reader.Job
@@ -78,16 +78,21 @@ public class RdbmsReader
                         throw AddaxException.asAddaxException(DBUtilErrorCode.REQUIRED_VALUE, "config 'jdbcUrl' is required and must not be " +
                                 "empty");
                     }
-                    DATABASE_TYPE.setDriverClassName(JdbcUtils.getDriverClassName((String) jdbcUrlList.get(0)));
+                    String jdbcUrl = (String) jdbcUrlList.get(0);
+                    if (jdbcUrl.startsWith("jdbc:dm:")) {
+                        DATABASE_TYPE_READ.setDriverClassName("dm.jdbc.driver.DmDriver");
+                    } else {
+                        DATABASE_TYPE_READ.setDriverClassName(JdbcUtils.getDriverClassName(jdbcUrl));
+                    }
                 } catch (SQLException e) {
                     throw AddaxException.asAddaxException(CommonErrorCode.CONFIG_ERROR, e.getMessage());
                 }
             }
             else {
                 // use custom jdbc driver
-                DATABASE_TYPE.setDriverClassName(jdbcDriver);
+                DATABASE_TYPE_READ.setDriverClassName(jdbcDriver);
             }
-            this.commonRdbmsReaderMaster = new SubCommonRdbmsReader.Job(DATABASE_TYPE);
+            this.commonRdbmsReaderMaster = new SubCommonRdbmsReader.Job(DATABASE_TYPE_READ);
             this.originalConfig = this.commonRdbmsReaderMaster.init(this.originalConfig);
         }
 
@@ -121,7 +126,7 @@ public class RdbmsReader
         public void init()
         {
             this.readerSliceConfig = getPluginJobConf();
-            this.commonRdbmsReaderSlave = new SubCommonRdbmsReader.Task(DATABASE_TYPE);
+            this.commonRdbmsReaderSlave = new SubCommonRdbmsReader.Task(DATABASE_TYPE_READ);
             this.commonRdbmsReaderSlave.init(this.readerSliceConfig);
         }
 
