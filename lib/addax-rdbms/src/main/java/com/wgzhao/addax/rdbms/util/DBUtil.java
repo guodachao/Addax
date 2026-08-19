@@ -419,6 +419,29 @@ public final class DBUtil
      * @param column table column
      * @return {@link List}
      */
+    /**
+     * Quote column names with double quotes for GBase database.
+     * If column is "*", return as-is. Otherwise split by comma and quote each column.
+     *
+     * @param column column name(s), may be comma-separated
+     * @return quoted column string
+     */
+    private static String quoteGBaseColumn(String column)
+    {
+        if ("*".equals(column)) {
+            return column;
+        }
+        String[] columns = column.split(",");
+        StringBuilder sb = new StringBuilder();
+        for (String col : columns) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append("\"").append(col.trim()).append("\"");
+        }
+        return sb.toString();
+    }
+
     public static List<Map<String, Object>> getColumnMetaData(Connection conn, String tableName, String column)
     {
         List<Map<String, Object>> result = new ArrayList<>();
@@ -430,8 +453,9 @@ public final class DBUtil
             if (DataBaseType.TDengine.getDriverClassName().equals(conn.getMetaData().getDriverName())) {
                 // TDengine does not support 1=2 clause
                 queryColumnSql = "SELECT " + column + " FROM " + tableName + " LIMIT 0";
-            }
-            else {
+            }else if(conn.getMetaData().getURL().contains("jdbc:gbase")){
+                queryColumnSql = "SELECT " + quoteGBaseColumn(column) + " FROM " + tableName + " WHERE 1 = 2";
+            } else {
                 queryColumnSql = "SELECT " + column + " FROM " + tableName + " WHERE 1 = 2";
             }
             ResultSetMetaData metaData = statement.executeQuery(queryColumnSql).getMetaData();

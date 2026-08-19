@@ -613,7 +613,20 @@ public class CommonRdbmsWriter
                 valueHolders.add(calcValueHolder(type));
             }
             //columns, valueHolders字段顺序应该匹配，以columns为准
-            insertOrReplaceTemplate = WriterUtil.getWriteTemplate(columns_no_update,columns, valueHolders, writeMode, dataBaseType, false);
+            boolean isGBase = jdbcUrl != null && jdbcUrl.contains("jdbc:gbase");
+            List<String> quotedColumns = columns;
+            List<String> quotedColumnsNoUpdate = columns_no_update;
+            if (isGBase) {
+                quotedColumns = new ArrayList<>();
+                for (String col : columns) {
+                    quotedColumns.add("\"" + col + "\"");
+                }
+                quotedColumnsNoUpdate = new ArrayList<>();
+                for (String col : columns_no_update) {
+                    quotedColumnsNoUpdate.add("\"" + col + "\"");
+                }
+            }
+            insertOrReplaceTemplate = WriterUtil.getWriteTemplate(quotedColumnsNoUpdate, quotedColumns, valueHolders, writeMode, dataBaseType, false);
             writeRecordSql = String.format(insertOrReplaceTemplate, table);
         }
 
