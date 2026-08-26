@@ -1,0 +1,27 @@
+{
+    "name": "gbase8amppftpwriter",
+    "parameter": {
+        "protocol": "sftp",
+        "host": "",
+        "port":22,
+        "username": "",
+        "password": "",
+        "privateKeyPath": "",
+        "timeout": 600000,
+        "connectPattern": "PASV",
+        "path": "",
+        "fileName": "",
+        "encoding": "",
+        "fieldDelimiter":"",
+        "nullFormat": "",
+        "dateFormat": "",
+        "fileFormat": "",
+        "loadDataInFileSQL": "",
+        "jdbcUrl": "",
+        "jdbcUsername": "",
+        "jdbcPassword": "",
+        "preSql": "",
+        "postSql": "",
+        "writeMode": "truncate|append"
+    }
+}

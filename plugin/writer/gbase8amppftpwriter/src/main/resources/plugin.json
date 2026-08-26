@@ -1,0 +1,6 @@
+{
+    "name": "gbase8amppftpwriter",
+    "class": "com.wgzhao.addax.plugin.writer.gbase8amppftpwriter.GBase8aMppFtpWriter",
+    "description": "useScene: test. mechanism: use addax framework to transport data to GBase 8a Mpp. warn: The more you know about the data, the less problems you encounter.",
+    "developer": "gbase"
+}
